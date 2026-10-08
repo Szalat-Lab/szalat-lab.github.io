@@ -1,0 +1,155 @@
+# Concepts shown on the Concepts page.
+#
+# A work is linked to a concept when its title or `topics` field (in publications.bib)
+# contains one of the `match` phrases. Matching ignores case and accents, and a phrase
+# matches at the start of a word: "transplant" also matches "transplantation".
+#
+# group sets the node color: disease, genomics, biology, clinical, population
+#
+# To add a concept, copy a block:
+#   - id: short-id            # used in the page URL: /concepts/short-id/
+#     label: Display Name
+#     group: genomics
+#     match: ["phrase one", "phrase two"]
+
+# --- Diseases -----------------------------------------------------------------
+- id: multiple-myeloma
+  label: Multiple myeloma
+  group: disease
+  match: ["myeloma", "myélome"]
+- id: al-amyloidosis
+  label: AL amyloidosis
+  group: disease
+  match: ["amyloidosis", "amylose", "light chain amyloid", "light-chain amyloid"]
+- id: precursor-states
+  label: MGUS and smoldering myeloma
+  group: disease
+  match: ["mgus", "monoclonal gammopathy of undetermined", "smoldering", "precursor"]
+- id: mgcs
+  label: Monoclonal gammopathies of clinical significance
+  group: disease
+  match: ["clinical significance", "renal significance", "mgrs", "mgcs", "deposition disease", "paraproteinemia", "monoclonal immunoglobulin", "monoclonal gammopathy associated", "associated with a monoclonal", "associated with monoclonal", "gammapathie"]
+- id: waldenstrom
+  label: Waldenström and IgM disorders
+  group: disease
+  match: ["waldenstr", "igm", "anti-mag"]
+- id: cryoglobulinemia
+  label: Cryoglobulinemia
+  group: disease
+  match: ["cryoglobulin", "cryofibrinogen"]
+- id: xanthogranuloma
+  label: Xanthomatosis and xanthogranuloma
+  group: disease
+  match: ["xanthom", "xanthogranuloma"]
+- id: castleman
+  label: Castleman disease
+  group: disease
+  match: ["castleman"]
+- id: other-cancers
+  label: Other cancers
+  group: disease
+  match: ["breast", "chronic lymphocytic", "cancer patients", "multiple primary"]
+- id: covid-19
+  label: COVID-19 and infection
+  group: disease
+  match: ["covid", "coronavirus", "sars-cov", "infection", "febrile neutropenia"]
+
+# --- Genomics and omics ---------------------------------------------------------
+- id: genomic-landscape
+  label: Cancer genomics
+  group: genomics
+  match: ["genomic landscape", "genome", "genomics", "whole genome", "whole-genome", "sequencing", "oncogenomic", "genomic analysis", "genomic patterns", "somatic alteration", "driver"]
+- id: mutational-processes
+  label: Mutational signatures
+  group: genomics
+  match: ["mutational signature", "mutational burden", "mutational activity", "apobec", "aid has", "mutation", "mutational"]
+- id: structural-variants
+  label: Structural variants and copy number
+  group: genomics
+  match: ["structural variant", "structural variation", "copy number", "hyperdiploid", "translocation", "t(4", "t(11", "t (11", "fusion", "rearrangement", "del17p", "breakpoint", "double-hit", "complex events"]
+- id: transcriptomics
+  label: Gene expression and transcriptomics
+  group: genomics
+  match: ["gene expression", "transcriptom", "rna-seq", "rna seq", "sequence analysis, rna", "lincrna", "non-coding rna", "intergenic non-coding", "splicing", "fusion transcript", "transcriptional"]
+- id: epigenomics
+  label: Epigenomics and chromatin
+  group: genomics
+  match: ["chromatin", "epigen", "enhancer", "promoter", "methylation", "accessibility", "non-coding genome"]
+- id: single-cell
+  label: Single-cell profiling
+  group: genomics
+  match: ["single-cell", "single cell", "scrna"]
+- id: dna-repair
+  label: DNA repair and genomic instability
+  group: genomics
+  match: ["dna repair", "dna damage", "excision repair", "genomic instability", "genome maintenance", "réparation", "ube2t"]
+- id: clonal-evolution
+  label: Clonal evolution and progression
+  group: genomics
+  match: ["clonal evolution", "chronolog", "progression", "disease progression", "evolution"]
+
+# --- Biology -------------------------------------------------------------------
+- id: microenvironment
+  label: Bone marrow microenvironment
+  group: biology
+  match: ["microenvironment", "stromal", "niche", "mesenchymal", "bone marrow cells"]
+- id: immunity
+  label: Immune system and immunodeficiency
+  group: biology
+  match: ["immune", "immunodeficiency", "autoimmun", "t cell", "b cell", "immunoglobulins", "uninvolved immunoglobulin", "good syndrome", "neutrophil"]
+- id: oncogenic-signaling
+  label: Transcription factors and signaling
+  group: biology
+  match: ["transcription factor", "p21-activated kinase", "protein kinase d", "pak4", "id2", "tcf3", "ywhae", "signaling", "dependencies", "dependency", "addiction", "tumor suppressor", "mitochondri"]
+- id: plasma-cell-biology
+  label: Plasma cell biology
+  group: biology
+  match: ["plasma cell", "plasma cells", "light chain", "germinal center", "polyclonal"]
+
+# --- Clinical ------------------------------------------------------------------
+- id: therapy
+  label: Myeloma therapy and clinical trials
+  group: clinical
+  match: ["bortezomib", "thalidomide", "lenalidomide", "pomalidomide", "daratumumab", "carfilzomib", "dexamethasone", "vtd", "induction", "consolidation", "quadruplet", "triplet", "antineoplastic", "proteasome inhibitor", "clinical trial", "novel agents", "regimens"]
+- id: immunotherapy
+  label: Immunotherapy and cellular therapy
+  group: clinical
+  match: ["car-t", "car t", "chimeric antigen", "bispecific", "teclistamab", "immunotherapy", "cellular therapy", "neurotoxicity"]
+- id: transplantation
+  label: Stem cell transplantation
+  group: clinical
+  match: ["transplant", "melphalan", "autotransplant", "busulfan", "total body irradiation", "allogeneic"]
+- id: response-criteria
+  label: Response criteria and MRD
+  group: clinical
+  match: ["response criteria", "graded", "organ response", "hematologic response", "hematological response", "minimal residual", "residual disease", "complete remission", "partial response", "response rate"]
+- id: prognosis
+  label: Prognosis and risk
+  group: clinical
+  match: ["prognos", "high-risk", "high risk", "survival", "outcome", "predictive", "predictors", "risk stratification", "superior outcome"]
+- id: biomarkers
+  label: Biomarkers and diagnosis
+  group: clinical
+  match: ["biomarker", "diagnosis", "diagnostic", "immunostaining", "immunohistochemistry", "hevylite", "assay", "fish", "monitoring device", "free light chain"]
+- id: organ-involvement
+  label: Kidney and heart involvement
+  group: clinical
+  match: ["kidney", "renal", "nephro", "proteinuria", "glomerular", "cardiac", "heart", "hepatic", "bleeding", "hemorrhage", "factor x"]
+- id: skin
+  label: Skin manifestations
+  group: clinical
+  match: ["skin", "cutaneous", "dermat", "mucosal"]
+
+# --- Population health ---------------------------------------------------------
+- id: disparities
+  label: Health disparities
+  group: population
+  match: ["african american", "black", "racial", "disparit", "duffy", "diverse", "safety-net", "neighborhood", "underserved"]
+- id: epidemiology
+  label: Epidemiology
+  group: population
+  match: ["epidemiology", "incidence", "prevalence", "body size", "veterans", "health study", "population"]
+- id: older-adults
+  label: Older adults and frailty
+  group: population
+  match: ["elderly", "older", "frail", "geriatric"]

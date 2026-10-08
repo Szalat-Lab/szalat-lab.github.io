@@ -15,12 +15,14 @@
 - People: `src/content/people/*.md`; Research areas: `src/content/research/*.md`
 - Publications: `src/data/publications.bib` (source of truth; never scrape Google Scholar).
   `note = {Abstract}` → Abstracts & posters section; `keywords = {featured}` → Home page list
-- Photos: `src/assets/people/`
+- Concepts graph: `src/content/concepts.yaml` (phrases matched against titles and the bib `topics` field;
+  `node scripts/add-topics.mjs src/data/publications.bib` fills `topics` from PubMed)
+- Collaborators: `src/content/collaborators.yaml`; photos: `src/assets/people/`
 - `site` / `base` (domain, repo path): `astro.config.mjs` only
 
 ## Design rules
 - Dark theme only. Neutrals + one accent (aqua `#5CD6CB`). Use tokens, never raw hex in components.
-- Multi-color `--omics-*` palette is for the decorative Home background only, not UI.
+- Multi-color `--omics-*` palette is for the Home background and Concepts graph only, not UI chrome.
 - Inter for body text, IBM Plex Mono for labels, dates, and metadata. Self-hosted.
 - Motion: hover/focus transitions ≤200 ms only. No scroll effects, parallax, carousels, or animation.
 - Prose ≤72ch. Must work from 360 px wide. WCAG 2.1 AA contrast, visible focus, alt text on all images.

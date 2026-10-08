@@ -20,6 +20,7 @@ export const site = {
 export const nav = [
   { label: 'Research', href: 'research/' },
   { label: 'Publications', href: 'publications/' },
+  { label: 'Concepts', href: 'concepts/' },
   { label: 'People', href: 'people/' },
   { label: 'Contact', href: 'contact/' },
 ];

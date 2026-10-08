@@ -31,9 +31,11 @@ export interface Publication {
   searchText: string;
   /** Normalized "surname|first initial" keys for every author, used to count collaborations. */
   authorKeys: string[];
+  /** Subject terms from the `topics` field (MeSH terms and author keywords). */
+  topics: string[];
 }
 
-const fold = (s: string) =>
+export const fold = (s: string) =>
   s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
 /** "Avet-Loiseau, Hervé" and "Avet Loiseau, H" both become "avet loiseau|h". */
@@ -136,6 +138,10 @@ export async function getPublications(): Promise<Publication[]> {
         authorKeys: creators
           .filter((c) => c.lastName && c.lastName !== 'others')
           .map((c) => nameKey([c.prefix, c.lastName].filter(Boolean).join(' '), c.firstName)),
+        topics: (str('topics') ?? '')
+          .split(';')
+          .map((t) => t.trim())
+          .filter(Boolean),
       };
     })
     .sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));

@@ -65,4 +65,14 @@ const collaborators = defineCollection({
   }),
 });
 
-export const collections = { people, research, collaborators };
+const concepts = defineCollection({
+  loader: file('src/content/concepts.yaml'),
+  schema: z.object({
+    label: z.string(),
+    group: z.enum(['disease', 'genomics', 'biology', 'clinical', 'population']),
+    // Phrases matched against each work's title and `topics` (case- and accent-insensitive).
+    match: z.array(z.string()).min(1),
+  }),
+});
+
+export const collections = { people, research, collaborators, concepts };
