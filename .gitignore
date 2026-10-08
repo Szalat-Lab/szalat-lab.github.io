@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 # local tooling
 .claude/
+scholar-enrich-cache.json
