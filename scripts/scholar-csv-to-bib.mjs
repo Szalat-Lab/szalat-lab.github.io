@@ -130,7 +130,11 @@ const FEATURED_DOIS = new Set([
 const SCHOLAR_OVERRIDES = [
   { title: 'role of dna damage repair processes in multiple myeloma', skip: 'English title of the 2019 doctoral thesis (listed in French)' },
   { title: 'gene expression profile in clinical practice', skip: 'same as the 2016 Clinical Cancer Research review' },
-  { title: 'xanthomatoses et immunoglobuline monoclonale', thesis: 'MD thesis' },
+  {
+    title: 'xanthomatoses et immunoglobuline monoclonale',
+    thesis: 'MD thesis',
+    school: "Département d'immunologie clinique, Hôpital Saint-Louis, Paris, France",
+  },
 ];
 
 // Matches reviewed by hand and rejected.
@@ -354,9 +358,8 @@ for (const [i, row] of rows.entries()) {
       todos,
     };
     if (override?.thesis) {
-      entry.school = undefined; // TODO set by hand
+      entry.school = override.school;
       entry.journal = undefined;
-      todos.push('add school = {...} (university that awarded the MD thesis)');
     }
   }
   const firstFamily = entry.authors[0]?.split(',')[0] ?? '';

@@ -22,23 +22,28 @@
 }
 
 :root {
-  /* Color: neutrals + one accent (deep teal) */
-  --color-bg: #ffffff;
-  --color-surface: #f7f8f9;
-  --color-text: #1a1d21;
-  --color-muted: #5b636d;
-  --color-border: #e3e6ea;
-  --color-accent: #0f6b6e;
-  --color-accent-strong: #0a5153;
-  --color-accent-soft: #e4f1f1;
-  --color-focus: #0f6b6e;
+  /* Color: dark theme, neutrals + one accent (aqua) */
+  --color-bg: #0b1114;
+  --color-surface: #121a1e;
+  --color-text: #e8ebee;
+  --color-muted: #9ba6b0;
+  --color-border: #222d32;
+  --color-accent: #5cd6cb;
+  --color-accent-strong: #8fe5dc;
+  --color-accent-soft: #123532;
+  --color-focus: #5cd6cb;
+  --color-on-accent: #0b1114;
 
-  /* Hero background motif */
-  --motif-grid: rgb(26 29 33 / 0.06);
-  --motif-label: #8a929b;
-  --motif-a: #0f6b6e;
-  --motif-b: #7c8792;
-  --motif-c: #b5bdc5;
+  /* Home background: categorical "omics" palette (decorative only) */
+  --motif-grid: rgb(232 235 238 / 0.045);
+  --motif-label: #5d6a74;
+  --omics-1: #5cd6cb; /* aqua */
+  --omics-2: #a78bfa; /* violet */
+  --omics-3: #f5b84b; /* amber */
+  --omics-4: #f27d72; /* coral */
+  --omics-5: #5dadec; /* sky */
+  --omics-6: #9bd86a; /* lime */
+  --omics-7: #e879b9; /* pink */
 
   /* Type */
   --font-sans: 'Inter Variable', 'Inter Fallback', system-ui, sans-serif;
@@ -74,27 +79,7 @@
   --duration: 160ms;
   --ease: cubic-bezier(0.2, 0, 0, 1);
 
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0f1416;
-    --color-surface: #161d20;
-    --color-text: #e6e8eb;
-    --color-muted: #9aa3ad;
-    --color-border: #263034;
-    --color-accent: #4fc3bc;
-    --color-accent-strong: #7dd6d0;
-    --color-accent-soft: #15302f;
-    --color-focus: #4fc3bc;
-
-    --motif-grid: rgb(230 232 235 / 0.05);
-    --motif-label: #5f6a73;
-    --motif-a: #4fc3bc;
-    --motif-b: #6b7782;
-    --motif-c: #3c474f;
-  }
+  color-scheme: dark;
 }
 
 /* --- Reset ------------------------------------------------------------- */

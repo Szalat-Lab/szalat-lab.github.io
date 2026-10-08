@@ -19,7 +19,8 @@
 - `site` / `base` (domain, repo path): `astro.config.mjs` only
 
 ## Design rules
-- Neutrals + one accent (teal `#0F6B6E` light / `#4FC3BC` dark). Use tokens, never raw hex in components.
+- Dark theme only. Neutrals + one accent (aqua `#5CD6CB`). Use tokens, never raw hex in components.
+- Multi-color `--omics-*` palette is for the decorative Home background only, not UI.
 - Inter for body text, IBM Plex Mono for labels, dates, and metadata. Self-hosted.
 - Motion: hover/focus transitions ≤200 ms only. No scroll effects, parallax, carousels, or animation.
 - Prose ≤72ch. Must work from 360 px wide. WCAG 2.1 AA contrast, visible focus, alt text on all images.
