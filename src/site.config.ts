@@ -1,4 +1,5 @@
 // Site-wide text and settings. Edit values here; every page reads from this file.
+// The lab has chosen not to list a public email or street address.
 
 export const site = {
   name: 'Szalat Lab',
@@ -14,9 +15,6 @@ export const site = {
     'Boston Medical Center',
     'Boston University Chobanian & Avedisian School of Medicine',
   ],
-  // TODO: confirm the public lab email and mailing address.
-  email: 'TODO@bmc.org',
-  address: ['Boston Medical Center', 'TODO: building and room', 'Boston, MA 02118'],
 };
 
 export const nav = [
