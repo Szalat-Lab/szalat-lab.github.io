@@ -1,21 +1,158 @@
 ---
-// TODO (Phase 2): build this page. Placeholder so navigation works during review.
+import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PersonCard from '../components/PersonCard.astro';
+import { getCollaboratorGroups, MIN_SHARED } from '../lib/collaborators';
+import { url } from '../lib/url';
+
+type Group = CollectionEntry<'people'>['data']['group'];
+const groupTitles: Record<Exclude<Group, 'pi'>, string> = {
+  postdoc: 'Postdoctoral fellows',
+  staff: 'Research staff',
+  'md-phd': 'MD/PhD students',
+  grad: 'Graduate students',
+  undergrad: 'Undergraduate students',
+  alumni: 'Alumni',
+};
+
+const people = (await getCollection('people')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name),
+);
+const pi = people.filter((p) => p.data.group === 'pi');
+const groups = (Object.keys(groupTitles) as (keyof typeof groupTitles)[])
+  .map((g) => ({ id: g, title: groupTitles[g], members: people.filter((p) => p.data.group === g) }))
+  .filter((g) => g.members.length > 0);
+
+const collaborators = await getCollaboratorGroups();
 ---
 
-<BaseLayout title="People" description="People — Szalat Lab.">
-  <section class="container stub">
-    <h1>People</h1>
-    <p>This page is under construction.</p>
-  </section>
+<BaseLayout
+  title="People"
+  description="Members of the Szalat Lab at Boston Medical Center and Boston University, and the collaborators we work with."
+>
+  <div class="container page">
+    <header class="page-head">
+      <h1>People</h1>
+      <p class="lead">
+        Physicians, scientists, and trainees working across the clinic and the lab, together with collaborators at
+        institutions in the United States and Europe.
+      </p>
+    </header>
+
+    <section class="block" aria-labelledby="pi-title">
+      <h2 id="pi-title" class="label">Principal Investigator</h2>
+      {pi.map((p) => <PersonCard person={p} feature />)}
+    </section>
+
+    {
+      groups.map((g) => (
+        <section class="block" aria-labelledby={`${g.id}-title`}>
+          <h2 id={`${g.id}-title`} class="label">
+            {g.title}
+          </h2>
+          <div class="grid">
+            {g.members.map((p) => (
+              <PersonCard person={p} />
+            ))}
+          </div>
+        </section>
+      ))
+    }
+
+    <section class="block" aria-labelledby="collab-title">
+      <h2 id="collab-title" class="label">Collaborators</h2>
+      <p class="intro">
+        Frequent co-authors, grouped by institution. Numbers show shared publications (papers and abstracts) in our <a
+          href={url('publications/')}>publication list</a
+        >; collaborators with at least {MIN_SHARED} are listed.
+      </p>
+      <div class="collab-grid">
+        {
+          collaborators.map((g) => (
+            <section class="inst" aria-label={g.institution}>
+              <h3>{g.institution}</h3>
+              <ul>
+                {g.people.map((c) => (
+                  <li>
+                    {c.url ? <a href={c.url}>{c.name}</a> : <span>{c.name}</span>}
+                    <span class="n" title="Shared publications">
+                      {c.shared}
+                      <span class="visually-hidden"> shared publications</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding-block: var(--space-8);
+  .page {
+    padding-block: var(--space-8) 0;
   }
-  .stub p {
+  .lead {
+    max-width: var(--measure);
     margin-top: var(--space-4);
     color: var(--color-muted);
+    font-size: var(--text-lg);
+  }
+  .block {
+    margin-top: var(--space-8);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+  .block > h2 {
+    margin-bottom: var(--space-5);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: var(--space-7) var(--space-6);
+  }
+  .intro {
+    max-width: var(--measure);
+    margin-bottom: var(--space-6);
+    color: var(--color-muted);
+  }
+  .collab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    gap: var(--space-4);
+  }
+  .inst {
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+  .inst h3 {
+    margin-bottom: var(--space-3);
+    font-size: var(--text-base);
+  }
+  .inst ul {
+    display: grid;
+    gap: var(--space-1);
+    padding: 0;
+    list-style: none;
+  }
+  .inst li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+  .inst li > :first-child {
+    color: var(--color-text);
+  }
+  .n {
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-variant-numeric: tabular-nums;
   }
 </style>

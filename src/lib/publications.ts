@@ -29,10 +29,17 @@ export interface Publication {
   featured: boolean;
   /** Lowercase text used by the search box (title, all authors, venue). */
   searchText: string;
+  /** Normalized "surname|first initial" keys for every author, used to count collaborations. */
+  authorKeys: string[];
 }
 
 const fold = (s: string) =>
   s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+
+/** "Avet-Loiseau, Hervé" and "Avet Loiseau, H" both become "avet loiseau|h". */
+export function nameKey(surname: string, first = ''): string {
+  return `${fold(surname).replace(/[-\s]+/g, ' ')}|${fold(first).replace(/[^a-z]/g, '').charAt(0)}`;
+}
 
 function initials(first = ''): string {
   const f = first.trim();
@@ -126,6 +133,9 @@ export async function getPublications(): Promise<Publication[]> {
         pmid: str('pmid'),
         featured: keywords.some((k) => k.trim().toLowerCase() === 'featured'),
         searchText: fold([title, authors.map((a) => a.name).join(' '), venue].join(' ')),
+        authorKeys: creators
+          .filter((c) => c.lastName && c.lastName !== 'others')
+          .map((c) => nameKey([c.prefix, c.lastName].filter(Boolean).join(' '), c.firstName)),
       };
     })
     .sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));

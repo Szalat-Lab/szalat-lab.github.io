@@ -3,6 +3,7 @@ name: Raphael E. Szalat
 credentials: MD, PhD
 role: Principal Investigator
 group: pi
+shortBio: Hematologist and Director of the Multiple Myeloma and Stem Cell Transplant Programs at Boston Medical Center. Leads myeloma clinical trials and translational research in plasma cell disorders.
 order: 1
 photo: ../../assets/people/raphael-szalat.avif
 photoAlt: Portrait of Raphael E. Szalat in a white coat

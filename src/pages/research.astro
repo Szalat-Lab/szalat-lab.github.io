@@ -1,21 +1,182 @@
 ---
-// TODO (Phase 2): build this page. Placeholder so navigation works during review.
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const areas = await Promise.all(
+  (await getCollection('research', (r) => !r.data.draft))
+    .sort((a, b) => a.data.order - b.data.order)
+    .map(async (r) => ({ ...r, Content: (await render(r)).Content })),
+);
 ---
 
-<BaseLayout title="Research" description="Research — Szalat Lab.">
-  <section class="container stub">
-    <h1>Research</h1>
-    <p>This page is under construction.</p>
-  </section>
+<BaseLayout
+  title="Research"
+  description="Research areas of the Szalat Lab: plasma cell biology in AL amyloidosis, the bone marrow microenvironment, and translational and clinical research in multiple myeloma."
+>
+  <div class="container page">
+    <header class="page-head">
+      <h1>Research</h1>
+      <p class="lead">
+        We study plasma cell disorders from the single cell to the clinic, combining multiomic profiling of patient
+        bone marrow with clinical trials in multiple myeloma and AL amyloidosis.
+      </p>
+      <nav aria-label="Research areas" class="toc">
+        <ol>
+          {
+            areas.map((a, i) => (
+              <li>
+                <a href={`#${a.id}`}>
+                  <span class="num">{String(i + 1).padStart(2, '0')}</span>
+                  {a.data.title}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+    </header>
+
+    {
+      areas.map((a, i) => (
+        <section id={a.id} class="area" aria-labelledby={`${a.id}-title`}>
+          <p class="label">
+            {String(i + 1).padStart(2, '0')}
+            {a.data.future && <span class="future">Future direction</span>}
+          </p>
+          <h2 id={`${a.id}-title`}>{a.data.title}</h2>
+          <p class="summary">{a.data.summary}</p>
+          <div class="prose">
+            <a.Content />
+          </div>
+          <div class="cols">
+            <div>
+              <h3 class="label">Key questions</h3>
+              <ul class="questions">
+                {a.data.questions.map((q) => (
+                  <li>{q}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 class="label">Approaches</h3>
+              <ul class="approaches">
+                {a.data.approaches.map((m) => (
+                  <li>{m}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      ))
+    }
+  </div>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding-block: var(--space-8);
+  .page {
+    padding-block: var(--space-8) 0;
   }
-  .stub p {
+  .lead {
+    max-width: var(--measure);
     margin-top: var(--space-4);
     color: var(--color-muted);
+    font-size: var(--text-lg);
+  }
+  .toc ol {
+    display: grid;
+    gap: var(--space-1);
+    margin-top: var(--space-6);
+    padding: 0;
+    list-style: none;
+  }
+  .toc a {
+    display: inline-flex;
+    gap: var(--space-3);
+    padding-block: var(--space-1);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color var(--duration) var(--ease);
+  }
+  .toc a:hover {
+    color: var(--color-accent);
+  }
+  .num {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    padding-top: 0.15em;
+  }
+
+  .area {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+    scroll-margin-top: var(--space-4);
+  }
+  .area > .label {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    margin-bottom: var(--space-3);
+    color: var(--color-accent);
+  }
+  .future {
+    padding: 0 var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    color: var(--color-muted);
+  }
+  .area h2 {
+    max-width: 30ch;
+  }
+  .summary {
+    max-width: var(--measure);
+    margin-top: var(--space-4);
+    font-size: var(--text-lg);
+    line-height: 1.5;
+  }
+  .prose:empty {
+    display: none;
+  }
+  .prose {
+    display: grid;
+    gap: var(--space-3);
+    max-width: var(--measure);
+    margin-top: var(--space-4);
+    color: var(--color-muted);
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+  .cols h3 {
+    margin-bottom: var(--space-3);
+  }
+  .questions {
+    display: grid;
+    gap: var(--space-3);
+    padding-left: 1.1em;
+    color: var(--color-text);
+  }
+  .questions li::marker {
+    color: var(--color-accent);
+  }
+  .approaches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+  .approaches li {
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
   }
 </style>

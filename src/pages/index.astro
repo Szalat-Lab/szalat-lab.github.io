@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroBackground from '../components/HeroBackground.astro';
 import { site } from '../site.config';
@@ -6,24 +7,10 @@ import { url } from '../lib/url';
 import PubEntry from '../components/PubEntry.astro';
 import { getPublications } from '../lib/publications';
 
-// TODO (Phase 2): replace with the three `featured` entries from the research collection.
-const highlights = [
-  {
-    id: 'al-amyloidosis',
-    title: 'Plasma cell biology in AL amyloidosis',
-    summary: 'Single-cell profiling of malignant and non-malignant plasma cells in patients with AL amyloidosis.',
-  },
-  {
-    id: 'microenvironment',
-    title: 'Bone marrow microenvironment and treatment response',
-    summary: 'How immune and myeloid compartments of the bone marrow change before and after therapy.',
-  },
-  {
-    id: 'translational',
-    title: 'Translational and clinical research in multiple myeloma',
-    summary: 'Clinical trials and biomarker studies that bring laboratory findings to patient care.',
-  },
-];
+// Research areas marked `featured: true` in src/content/research/.
+const highlights = (await getCollection('research', (r) => r.data.featured && !r.data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
 
 // High-impact papers marked `keywords = {featured}` in src/data/publications.bib.
 const featured = (await getPublications()).filter((p) => p.featured);
@@ -48,7 +35,7 @@ const featured = (await getPublications()).filter((p) => p.featured);
 
   <section class="container block" aria-labelledby="highlights-title">
     <div class="block-head">
-      <h2 id="highlights-title">Research</h2>
+      <h2 id="highlights-title">Current Projects</h2>
       <a class="more mono" href={url('research/')}>All research areas →</a>
     </div>
     <ul class="cards">
@@ -57,9 +44,9 @@ const featured = (await getPublications()).filter((p) => p.featured);
           <li class="card">
             <p class="label">{String(i + 1).padStart(2, '0')}</p>
             <h3>
-              <a href={url(`research/#${h.id}`)}>{h.title}</a>
+              <a href={url(`research/#${h.id}`)}>{h.data.title}</a>
             </h3>
-            <p>{h.summary}</p>
+            <p>{h.data.summary}</p>
           </li>
         ))
       }

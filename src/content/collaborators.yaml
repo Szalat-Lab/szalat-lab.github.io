@@ -1,0 +1,157 @@
+# Collaborators shown on the People page, grouped by institution.
+# Shared-publication counts are computed automatically from src/data/publications.bib.
+#
+# To add a collaborator, copy a block and edit it:
+#   - id: unique-short-id
+#     name: Full Name
+#     institution: Institution Name
+#     match: ["Surname, F"]   # surname + first initial, as in publications.bib
+#     url: https://...         # optional
+#
+# TODO: verify each institution (current primary affiliation, drafted from public sources).
+
+# Dana-Farber Cancer Institute
+- id: munshi
+  name: Nikhil C. Munshi
+  institution: Dana-Farber Cancer Institute
+  match: ["Munshi, N"]
+- id: samur-mk
+  name: Mehmet Kemal Samur
+  institution: Dana-Farber Cancer Institute
+  match: ["Samur, M"]
+- id: fulciniti
+  name: Mariateresa Fulciniti
+  institution: Dana-Farber Cancer Institute
+  match: ["Fulciniti, M"]
+- id: parmigiani
+  name: Giovanni Parmigiani
+  institution: Dana-Farber Cancer Institute
+  match: ["Parmigiani, G"]
+- id: aktas-samur
+  name: Anil Aktas Samur
+  institution: Dana-Farber Cancer Institute
+  match: ["Aktas Samur, A", "Aktas-Samur, A"]
+- id: shammas
+  name: Masood A. Shammas
+  institution: Dana-Farber Cancer Institute
+  match: ["Shammas, M"]
+- id: talluri
+  name: Srikanth Talluri
+  institution: Dana-Farber Cancer Institute
+  match: ["Talluri, S"]
+- id: richardson
+  name: Paul G. Richardson
+  institution: Dana-Farber Cancer Institute
+  match: ["Richardson, P"]
+
+# Boston Medical Center / Boston University
+- id: sanchorawala
+  name: Vaishali Sanchorawala
+  institution: Boston Medical Center
+  match: ["Sanchorawala, V"]
+- id: sloan
+  name: J. Mark Sloan
+  institution: Boston Medical Center
+  match: ["Sloan, J"]
+- id: staron
+  name: Andrew Staron
+  institution: Boston Medical Center
+  match: ["Staron, A"]
+- id: edwards
+  name: Camille V. Edwards
+  institution: Boston Medical Center
+  match: ["Edwards, C"]
+
+# France
+- id: avet-loiseau
+  name: Hervé Avet-Loiseau
+  institution: IUCT-Oncopole, Toulouse
+  match: ["Avet-Loiseau, H", "Avet Loiseau, H"]
+- id: corre
+  name: Jill Corre
+  institution: IUCT-Oncopole, Toulouse
+  match: ["Corre, J"]
+- id: attal
+  name: Michel Attal
+  institution: IUCT-Oncopole, Toulouse
+  match: ["Attal, M"]
+- id: moreau
+  name: Philippe Moreau
+  institution: Nantes University Hospital
+  match: ["Moreau, P"]
+- id: minvielle
+  name: Stéphane Minvielle
+  institution: Nantes University Hospital
+  match: ["Minvielle, S"]
+- id: magrangeas
+  name: Florence Magrangeas
+  institution: Nantes University Hospital
+  match: ["Magrangeas, F"]
+- id: fermand
+  name: Jean-Paul Fermand
+  institution: Hôpital Saint-Louis, Paris
+  match: ["Fermand, J"]
+- id: arnulf
+  name: Bertrand Arnulf
+  institution: Hôpital Saint-Louis, Paris
+  match: ["Arnulf, B"]
+- id: malphettes
+  name: Marion Malphettes
+  institution: Hôpital Saint-Louis, Paris
+  match: ["Malphettes, M"]
+- id: asli
+  name: Bouchra Asli
+  institution: Hôpital Saint-Louis, Paris
+  match: ["Asli, B"]
+
+# Myeloma genomics
+- id: maura
+  name: Francesco Maura
+  institution: Sylvester Comprehensive Cancer Center, University of Miami
+  match: ["Maura, F"]
+- id: bolli
+  name: Niccolò Bolli
+  institution: University of Milan
+  match: ["Bolli, N"]
+- id: martincorena
+  name: Iñigo Martincorena
+  institution: Wellcome Sanger Institute
+  match: ["Martincorena, I"]
+- id: dawson
+  name: Kevin J. Dawson
+  institution: Wellcome Sanger Institute
+  match: ["Dawson, K"]
+
+# AL amyloidosis response criteria
+- id: muchtar
+  name: Eli Muchtar
+  institution: Mayo Clinic
+  match: ["Muchtar, E"]
+- id: dispenzieri
+  name: Angela Dispenzieri
+  institution: Mayo Clinic
+  match: ["Dispenzieri, A"]
+- id: kumar
+  name: Shaji K. Kumar
+  institution: Mayo Clinic
+  match: ["Kumar, S"]
+- id: palladini
+  name: Giovanni Palladini
+  institution: University of Pavia
+  match: ["Palladini, G"]
+- id: merlini
+  name: Giampaolo Merlini
+  institution: University of Pavia
+  match: ["Merlini, G"]
+- id: milani
+  name: Paolo Milani
+  institution: University of Pavia
+  match: ["Milani, P"]
+- id: schonland
+  name: Stefan Schönland
+  institution: Heidelberg University Hospital
+  match: ["Schönland, S", "Schonland, S"]
+- id: hegenbart
+  name: Ute Hegenbart
+  institution: Heidelberg University Hospital
+  match: ["Hegenbart, U"]
