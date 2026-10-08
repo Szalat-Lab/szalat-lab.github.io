@@ -95,7 +95,7 @@ function isAbstractWork(work, doi) {
     /^S\d/.test(work.page ?? '') ||
     /blood\.v\d+\.\d+\.(\d+)\.\1$/.test(doi) || // ASH abstracts, e.g. blood.v128.22.356.356
     ABSTRACT_DOIS.has(doi) ||
-    /blood-20\d\d-|blood\.v\d+\.suppl|s2152-2650|j\.clml\.2019\.09\.|hs9\.0000/.test(doi) ||
+    /blood-20\d\d-\d+$|blood\.v\d+\.suppl|s2152-2650|j\.clml\.2019\.09\.|hs9\.0000/.test(doi) ||
     /^(OAB|P|PF|PS|PB|EP|S)-?\d+[:\s]/.test(work.title?.[0] ?? '')
   );
 }
@@ -111,6 +111,27 @@ const NAME_FIXES = {
 
 // Congress abstracts that the patterns above miss.
 const ABSTRACT_DOIS = new Set(['10.1016/j.nephro.2014.07.332']);
+
+// Journal names normalized for display.
+const JOURNAL_FIXES = { 'Blood Journal': 'Blood' };
+
+// High-impact papers shown on the Home page (keywords = {featured}).
+const FEATURED_DOIS = new Set([
+  '10.1200/jco-25-00289', // JCO 2026, genomically smoldering MM
+  '10.1158/2643-3230.bcd-25-0048', // Blood Cancer Discovery 2025, ID2
+  '10.1038/s41467-024-47793-5', // Nature Communications 2024, stromal chromatin remodeling
+  '10.1001/jamaoncol.2024.2629', // JAMA Oncology 2024, kidney response criteria
+  '10.1200/jco.22.00643', // JCO 2023, cardiac response criteria
+  '10.1182/blood.2022017094', // Blood 2023, melphalan mutational burden
+]);
+
+// Scholar rows without a DOI, reviewed by hand (matched on the start of the Scholar title).
+// Any other row without a DOI is a meeting abstract.
+const SCHOLAR_OVERRIDES = [
+  { title: 'role of dna damage repair processes in multiple myeloma', skip: 'English title of the 2019 doctoral thesis (listed in French)' },
+  { title: 'gene expression profile in clinical practice', skip: 'same as the 2016 Clinical Cancer Research review' },
+  { title: 'xanthomatoses et immunoglobuline monoclonale', thesis: 'MD thesis' },
+];
 
 // Matches reviewed by hand and rejected.
 const EXCLUDE_DOIS = {
@@ -191,6 +212,7 @@ function formatEntry(e) {
     ['doi', e.doi],
     ['pmid', e.pmid],
     ['note', e.note],
+    ['keywords', e.keywords],
   ];
   for (const [k, v] of fields) if (v) lines.push(`  ${k.padEnd(7)} = {${k === 'doi' ? v : texEscape(v)}},`);
   lines.push('}');
@@ -280,7 +302,10 @@ for (const [i, row] of rows.entries()) {
     entry = {
       title: stripTags(work.title?.[0] ?? row.Title),
       authors,
-      journal: stripTags(work['container-title']?.[0] ?? parseVenue(row.Venue).journal),
+      journal: (() => {
+        const j = stripTags(work['container-title']?.[0] ?? parseVenue(row.Venue).journal);
+        return JOURNAL_FIXES[j] ?? j;
+      })(),
       year,
       volume: work.volume,
       number: work.issue,
@@ -288,6 +313,7 @@ for (const [i, row] of rows.entries()) {
       doi,
       pmid,
       note: abstract ? 'Abstract' : thesis ? 'Doctoral thesis' : undefined,
+      keywords: FEATURED_DOIS.has(doi) ? 'featured' : undefined,
       type: thesis ? 'phdthesis' : 'article',
       todos,
     };
@@ -300,6 +326,12 @@ for (const [i, row] of rows.entries()) {
     if (pmid) report.pmid++;
     seenDoi.set(doi, row.Title);
   } else {
+    const override = SCHOLAR_OVERRIDES.find((o) => row.Title.toLowerCase().startsWith(o.title));
+    if (override?.skip) {
+      report.duplicates++;
+      dupes.push(`${row.Year} ${row.Title.slice(0, 70)} (excluded: ${override.skip})`);
+      continue;
+    }
     report.unmatched++;
     const v = parseVenue(row.Venue);
     const authors = row.Authors.split(',').map((s) => s.trim()).filter((s) => s && s !== '...');
@@ -317,10 +349,15 @@ for (const [i, row] of rows.entries()) {
       volume: v.volume,
       number: v.number,
       pages: v.pages,
-      note: isAbstractVenue(row.Venue) || /^[A-Z][A-Z0-9 ,:()-]{25,}$/.test(row.Title) ? 'Abstract' : undefined,
-      type: 'article',
+      note: override?.thesis ?? 'Abstract',
+      type: override?.thesis ? 'phdthesis' : 'article',
       todos,
     };
+    if (override?.thesis) {
+      entry.school = undefined; // TODO set by hand
+      entry.journal = undefined;
+      todos.push('add school = {...} (university that awarded the MD thesis)');
+    }
   }
   const firstFamily = entry.authors[0]?.split(',')[0] ?? '';
   entry.key = bibKey(firstFamily, entry.year, entry.title, usedKeys);
@@ -338,6 +375,11 @@ const header = `% Szalat Lab publications. This file is the source of truth for 
 % To add a paper: copy a BibTeX entry (PubMed "Cite", doi.org, or Zotero export), paste it
 % below, and make sure it has title, author, journal, year, and doi (pmid optional).
 % Entries marked "% TODO" need a human check.
+%
+% Sections on the Publications page:
+%   - note = {Abstract}  -> "Abstracts & posters"
+%   - everything else    -> "Papers"
+% Home page: entries with keywords = {featured} (high-impact papers, newest first).
 `;
 writeFileSync(outPath, header + '\n' + entries.map(formatEntry).join('\n\n') + '\n');
 

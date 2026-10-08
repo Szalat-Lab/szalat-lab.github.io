@@ -11,9 +11,10 @@
 - `npm run preview`: serve the built site at http://localhost:4321/szalat-lab/
 
 ## Content locations
-- Site text, nav, email, address: `src/site.config.ts`
+- Site text (mission, overview, affiliations) and nav: `src/site.config.ts`
 - People: `src/content/people/*.md`; Research areas: `src/content/research/*.md`
-- Publications: `src/data/publications.bib` (source of truth; never scrape Google Scholar)
+- Publications: `src/data/publications.bib` (source of truth; never scrape Google Scholar).
+  `note = {Abstract}` → Abstracts & posters section; `keywords = {featured}` → Home page list
 - Photos: `src/assets/people/`
 - `site` / `base` (domain, repo path): `astro.config.mjs` only
 

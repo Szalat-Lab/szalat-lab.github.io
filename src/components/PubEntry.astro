@@ -1,0 +1,130 @@
+---
+import type { Publication } from '../lib/publications';
+
+interface Props {
+  pub: Publication;
+  /** Show the year in a left column (Home page). */
+  showYear?: boolean;
+}
+
+const { pub, showYear = false } = Astro.props;
+const details = [
+  pub.volume && (pub.number ? `${pub.volume}(${pub.number})` : pub.volume),
+  pub.pages,
+]
+  .filter(Boolean)
+  .join(':');
+---
+
+<li class:list={['pub', { 'with-year': showYear }]} data-year={pub.year} data-search={pub.searchText}>
+  {showYear && <span class="year">{pub.year}</span>}
+  <div>
+    <p class="title">
+      {pub.title}
+      {pub.isThesis && <span class="tag">Thesis</span>}
+    </p>
+    <p class="authors">
+      {
+        pub.authorsShort.map((a, i) => (
+          <>
+            {i > 0 && ', '}
+            {a === 'gap' ? (
+              <span title="Authors omitted; full list at the DOI link">…</span>
+            ) : a.isMember ? (
+              <strong>{a.name}</strong>
+            ) : (
+              a.name
+            )}
+          </>
+        ))
+      }
+      {pub.etAl && ', et al.'}
+    </p>
+    <p class="meta">
+      {pub.venue && <cite>{pub.venue}</cite>}
+      {details && <span class="mono">{details}</span>}
+      {
+        pub.doi && (
+          <a class="mono" href={`https://doi.org/${pub.doi}`}>
+            DOI<span class="visually-hidden">: {pub.title}</span>
+          </a>
+        )
+      }
+      {
+        pub.pmid && (
+          <a class="mono" href={`https://pubmed.ncbi.nlm.nih.gov/${pub.pmid}/`}>
+            PubMed<span class="visually-hidden">: {pub.title}</span>
+          </a>
+        )
+      }
+    </p>
+  </div>
+</li>
+
+<style>
+  .pub {
+    padding-block: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .with-year {
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: var(--space-4);
+  }
+  .year {
+    padding-top: 0.15em;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+  .title {
+    max-width: var(--measure);
+    font-weight: 550;
+  }
+  .tag {
+    display: inline-block;
+    margin-left: var(--space-2);
+    padding: 0 var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    vertical-align: 0.1em;
+  }
+  .authors {
+    max-width: var(--measure);
+    margin-top: var(--space-1);
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+  .authors strong {
+    color: var(--color-text);
+    font-weight: 650;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+    margin-top: var(--space-1);
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+  .meta .mono {
+    font-size: var(--text-xs);
+  }
+  cite {
+    font-style: italic;
+  }
+  .meta a {
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  }
+  @media (max-width: 48rem) {
+    .with-year {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+  }
+</style>

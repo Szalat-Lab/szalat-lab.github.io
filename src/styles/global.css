@@ -200,6 +200,9 @@ a:hover {
 }
 
 /* --- Utilities --------------------------------------------------------- */
+[hidden] {
+  display: none !important;
+}
 .container {
   width: 100%;
   max-width: var(--container);
