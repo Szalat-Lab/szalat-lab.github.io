@@ -8,7 +8,7 @@
 ## Commands
 - `npm run dev`: local dev server
 - `npm run build`: must pass with zero errors and warnings before committing
-- `npm run preview`: serve the built site at http://localhost:4321/szalat-lab/
+- `npm run preview`: serve the built site at http://localhost:4321/
 
 ## Content locations
 - Site text (mission, overview, affiliations) and nav: `src/site.config.ts`
