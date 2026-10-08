@@ -1,0 +1,97 @@
+---
+import { site, nav } from '../site.config';
+import { url } from '../lib/url';
+
+const current = Astro.url.pathname.replace(/\/?$/, '/');
+const isCurrent = (href: string) => current.startsWith(url(href));
+---
+
+<header class="site-header">
+  <div class="container inner">
+    <a class="brand" href={url()}>
+      <svg class="mark" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="7" cy="8" r="2.4"></circle>
+        <circle cx="15.5" cy="6" r="1.6"></circle>
+        <circle cx="17" cy="15" r="2.8"></circle>
+        <circle cx="8.5" cy="17" r="1.4"></circle>
+      </svg>
+      <span>{site.name}</span>
+    </a>
+    <nav aria-label="Main">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={url(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 2;
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  }
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-5);
+    padding-block: var(--space-4);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text);
+    font-weight: 650;
+    font-size: var(--text-lg);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+  .mark {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: var(--color-accent);
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+  nav a {
+    display: inline-block;
+    padding-block: var(--space-2);
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition:
+      color var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
+  }
+  nav a:hover {
+    color: var(--color-text);
+  }
+  nav a[aria-current='page'] {
+    color: var(--color-text);
+    border-bottom-color: var(--color-accent);
+  }
+  @media (max-width: 30rem) {
+    ul {
+      gap: var(--space-1) var(--space-3);
+    }
+  }
+</style>

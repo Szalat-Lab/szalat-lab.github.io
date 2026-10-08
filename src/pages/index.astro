@@ -1,0 +1,317 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroBackground from '../components/HeroBackground.astro';
+import { site } from '../site.config';
+import { url } from '../lib/url';
+
+// TODO (Phase 2): replace with the three `featured` entries from the research collection.
+const highlights = [
+  {
+    id: 'al-amyloidosis',
+    title: 'Plasma cell biology in AL amyloidosis',
+    summary: 'Single-cell profiling of malignant and non-malignant plasma cells in patients with AL amyloidosis.',
+  },
+  {
+    id: 'microenvironment',
+    title: 'Bone marrow microenvironment and treatment response',
+    summary: 'How immune and myeloid compartments of the bone marrow change before and after therapy.',
+  },
+  {
+    id: 'translational',
+    title: 'Translational and clinical research in multiple myeloma',
+    summary: 'Clinical trials and biomarker studies that bring laboratory findings to patient care.',
+  },
+];
+
+// TODO (Phase 3): replace with the most recent entries parsed from src/data/publications.bib.
+const recent = [
+  {
+    authors: 'Smith J, Samur M, Talluri S, et al.',
+    title:
+      'Single-cell transcriptomics of AL amyloidosis reveals pathogenic mechanisms, immune interactions and altered clonal and polyclonal plasma cell phenotypes',
+    journal: 'Blood',
+    year: 2025,
+  },
+  {
+    authors: 'Szalat RE, Anderson KC, Munshi NC',
+    title: 'Role of minimal residual disease assessment in multiple myeloma',
+    journal: 'Haematologica',
+    year: 2024,
+  },
+  {
+    authors: 'Muchtar E, Dispenzieri A, Wisniowski B, et al.',
+    title: 'Graded cardiac response criteria for patients with systemic light chain amyloidosis',
+    journal: 'Journal of Clinical Oncology',
+    year: 2023,
+  },
+];
+---
+
+<BaseLayout>
+  <div class="home-top">
+    <HeroBackground />
+    <div class="scrim" aria-hidden="true"></div>
+
+    <section class="container hero" aria-labelledby="hero-title">
+      <p class="label eyebrow">{site.affiliations.join(' · ')}</p>
+      <h1 id="hero-title">{site.name}</h1>
+      <p class="mission">{site.mission}</p>
+      <p class="overview">{site.overview}</p>
+      <p class="actions">
+        <a class="button primary" href={url('research/')}>Our research</a>
+        <a class="button" href={url('people/')}>Meet the team</a>
+      </p>
+    </section>
+  </div>
+
+  <section class="container block" aria-labelledby="highlights-title">
+    <div class="block-head">
+      <h2 id="highlights-title">Research</h2>
+      <a class="more mono" href={url('research/')}>All research areas →</a>
+    </div>
+    <ul class="cards">
+      {
+        highlights.map((h, i) => (
+          <li class="card">
+            <p class="label">{String(i + 1).padStart(2, '0')}</p>
+            <h3>
+              <a href={url(`research/#${h.id}`)}>{h.title}</a>
+            </h3>
+            <p>{h.summary}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="container block" aria-labelledby="pubs-title">
+    <div class="block-head">
+      <h2 id="pubs-title">Recent publications</h2>
+      <a class="more mono" href={url('publications/')}>All publications →</a>
+    </div>
+    <ol class="pubs">
+      {
+        recent.map((p) => (
+          <li>
+            <span class="year mono">{p.year}</span>
+            <div>
+              <p class="pub-title">{p.title}</p>
+              <p class="pub-meta">
+                {p.authors} <span class="journal">{p.journal}</span>
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="container block" aria-labelledby="people-title">
+    <div class="people-cta">
+      <div>
+        <h2 id="people-title">People</h2>
+        <p>Physicians, scientists, and trainees working across the clinic and the lab.</p>
+      </div>
+      <a class="button" href={url('people/')}>Meet the team</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .home-top {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .home-top > :global(.hero-bg) {
+    z-index: -2;
+  }
+  .scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(to bottom, transparent 75%, var(--color-bg)),
+      linear-gradient(90deg, var(--color-bg) 0%, var(--color-bg) 32%, color-mix(in srgb, var(--color-bg) 70%, transparent) 52%, transparent 72%);
+  }
+  .hero {
+    padding-block: var(--space-9) var(--space-8);
+  }
+  .hero > * {
+    max-width: 40rem;
+  }
+  .eyebrow {
+    margin-bottom: var(--space-4);
+  }
+  .mission {
+    margin-top: var(--space-5);
+    font-size: var(--text-xl);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+  .overview {
+    margin-top: var(--space-4);
+    color: var(--color-muted);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: var(--space-2) var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      border-color var(--duration) var(--ease),
+      background-color var(--duration) var(--ease),
+      color var(--duration) var(--ease);
+  }
+  .button:hover {
+    border-color: var(--color-accent);
+    color: var(--color-text);
+  }
+  .button.primary {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-bg);
+  }
+  .button.primary:hover {
+    border-color: var(--color-accent-strong);
+    background: var(--color-accent-strong);
+    color: var(--color-bg);
+  }
+
+  .block {
+    margin-top: var(--space-8);
+  }
+  .block-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+  .more {
+    font-size: var(--text-sm);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+  .card {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    transition: border-color var(--duration) var(--ease);
+  }
+  .card:hover,
+  .card:focus-within {
+    border-color: var(--color-accent);
+  }
+  .card h3 a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  /* Whole card is clickable via the heading link. */
+  .card h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+  }
+  .card h3 a:focus-visible {
+    outline: none;
+  }
+  .card h3 a:focus-visible::after {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+  .card p:last-child {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+
+  .pubs {
+    display: grid;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+  .pubs li {
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .year {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    padding-top: 0.15em;
+  }
+  .pub-title {
+    max-width: var(--measure);
+    font-weight: 550;
+  }
+  .pub-meta {
+    margin-top: var(--space-1);
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+  .journal {
+    font-style: italic;
+  }
+
+  .people-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+  .people-cta p {
+    margin-top: var(--space-2);
+    color: var(--color-muted);
+  }
+
+  @media (max-width: 48rem) {
+    .hero {
+      padding-block: var(--space-7) var(--space-7);
+    }
+    .scrim {
+      background:
+        linear-gradient(to bottom, transparent 70%, var(--color-bg)),
+        color-mix(in srgb, var(--color-bg) 78%, transparent);
+    }
+    .pubs li {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+  }
+</style>

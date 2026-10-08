@@ -1,0 +1,61 @@
+---
+import { site } from '../site.config';
+import { url } from '../lib/url';
+
+// "Last updated" is the date of the most recent build.
+const built = new Date();
+const iso = built.toISOString().slice(0, 10);
+const year = built.getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container inner">
+    <div>
+      <p class="name">{site.name}</p>
+      <ul class="affiliations">
+        {site.affiliations.map((a) => <li>{a}</li>)}
+      </ul>
+    </div>
+    <div class="meta">
+      <p><a href={url('contact/')}>Contact</a></p>
+      <p class="mono">
+        Last updated <time datetime={iso}>{iso}</time>
+      </p>
+      <p class="mono">© {year} {site.name}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-9);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-5);
+    padding-block: var(--space-6);
+  }
+  .name {
+    color: var(--color-text);
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+  }
+  .affiliations {
+    padding: 0;
+    list-style: none;
+  }
+  .meta {
+    display: grid;
+    gap: var(--space-1);
+    align-content: start;
+  }
+  .mono {
+    font-size: var(--text-xs);
+  }
+</style>

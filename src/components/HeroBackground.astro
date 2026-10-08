@@ -1,0 +1,159 @@
+---
+// Static, decorative background for the Home page: a faint plot grid, a
+// UMAP-style point cloud, and a few density contours. Generated once at build
+// time from a fixed seed, so it looks the same on every build. No client JS.
+
+const W = 1440;
+const H = 800;
+
+// Small deterministic PRNG (mulberry32) + Gaussian sampler.
+function prng(seed: number) {
+  return () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const rand = prng(20241007);
+const gauss = () => {
+  const u = 1 - rand();
+  const v = rand();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+};
+
+type Tone = 'a' | 'b' | 'c';
+type Pt = [number, number];
+interface Blob { kind: 'blob'; cx: number; cy: number; sx: number; sy: number; rot: number; n: number; tone: Tone; contour?: boolean }
+interface Arc { kind: 'arc'; p0: Pt; p1: Pt; p2: Pt; width: number; n: number; tone: Tone }
+
+const clusters: (Blob | Arc)[] = [
+  { kind: 'blob', cx: 1070, cy: 250, sx: 72, sy: 44, rot: 20, n: 150, tone: 'a', contour: true },
+  { kind: 'arc', p0: [830, 430], p1: [1010, 590], p2: [1230, 520], width: 17, n: 160, tone: 'b' },
+  { kind: 'blob', cx: 1300, cy: 400, sx: 44, sy: 82, rot: -15, n: 120, tone: 'c', contour: true },
+  { kind: 'blob', cx: 900, cy: 180, sx: 38, sy: 28, rot: 0, n: 70, tone: 'b' },
+  { kind: 'arc', p0: [1100, 680], p1: [1250, 740], p2: [1390, 640], width: 13, n: 90, tone: 'a' },
+  { kind: 'blob', cx: 1385, cy: 170, sx: 28, sy: 38, rot: 0, n: 55, tone: 'a' },
+  { kind: 'blob', cx: 960, cy: 720, sx: 40, sy: 22, rot: 25, n: 50, tone: 'c' },
+];
+
+const r1 = (x: number) => Math.round(x * 10) / 10;
+const dots: Record<Tone, string[]> = { a: [], b: [], c: [] };
+const contours: string[] = [];
+
+for (const c of clusters) {
+  if (c.kind === 'blob') {
+    const th = (c.rot * Math.PI) / 180;
+    for (let i = 0; i < c.n; i++) {
+      const x = gauss() * c.sx;
+      const y = gauss() * c.sy;
+      dots[c.tone].push(`M${Math.round(c.cx + x * Math.cos(th) - y * Math.sin(th))} ${Math.round(c.cy + x * Math.sin(th) + y * Math.cos(th))}h0`);
+    }
+    if (c.contour) {
+      for (const scale of [1.6, 2.3]) {
+        const ph1 = rand() * 6.28;
+        const ph2 = rand() * 6.28;
+        const pts: string[] = [];
+        for (let k = 0; k < 72; k++) {
+          const a = (k / 72) * Math.PI * 2;
+          const wobble = 1 + 0.09 * Math.sin(3 * a + ph1) + 0.05 * Math.sin(5 * a + ph2);
+          const x = Math.cos(a) * c.sx * scale * wobble;
+          const y = Math.sin(a) * c.sy * scale * wobble;
+          pts.push(`${r1(c.cx + x * Math.cos(th) - y * Math.sin(th))} ${r1(c.cy + x * Math.sin(th) + y * Math.cos(th))}`);
+        }
+        contours.push(`M${pts.join('L')}Z`);
+      }
+    }
+  } else {
+    for (let i = 0; i < c.n; i++) {
+      const t = rand();
+      const x = (1 - t) ** 2 * c.p0[0] + 2 * (1 - t) * t * c.p1[0] + t ** 2 * c.p2[0];
+      const y = (1 - t) ** 2 * c.p0[1] + 2 * (1 - t) * t * c.p1[1] + t ** 2 * c.p2[1];
+      const w = c.width * (0.6 + Math.sin(Math.PI * t));
+      dots[c.tone].push(`M${Math.round(x + gauss() * w)} ${Math.round(y + gauss() * w)}h0`);
+    }
+  }
+}
+
+// Sparse "ambient" cells across the right two thirds.
+const ambient: string[] = [];
+for (let i = 0; i < 70; i++) {
+  ambient.push(`M${Math.round(640 + rand() * (W - 640))} ${Math.round(rand() * H)}h0`);
+}
+---
+
+<svg class="hero-bg" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="hero-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" class="grid"></path>
+    </pattern>
+  </defs>
+  <rect width={W} height={H} fill="url(#hero-grid)"></rect>
+  {contours.map((d) => <path d={d} class="contour" />)}
+  <path d={ambient.join('')} class="dots ambient"></path>
+  <path d={dots.c.join('')} class="dots tone-c"></path>
+  <path d={dots.b.join('')} class="dots tone-b"></path>
+  <path d={dots.a.join('')} class="dots tone-a"></path>
+  <g class="axes">
+    <path d="M760 772V708M760 772H824" class="axis"></path>
+    <path d="M820 768l6 4-6 4M756 712l4-6 4 6" class="axis"></path>
+    <text x="834" y="776">UMAP 1</text>
+    <text x="752" y="698" transform="rotate(-90 752 698)">UMAP 2</text>
+  </g>
+</svg>
+
+<style>
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .grid {
+    stroke: var(--motif-grid);
+    stroke-width: 1;
+  }
+  .contour {
+    fill: none;
+    stroke: var(--motif-b);
+    stroke-width: 1;
+    opacity: 0.35;
+  }
+  .dots {
+    fill: none;
+    stroke-linecap: round;
+  }
+  .tone-a {
+    stroke: var(--motif-a);
+    stroke-width: 5;
+    opacity: 0.65;
+  }
+  .tone-b {
+    stroke: var(--motif-b);
+    stroke-width: 5;
+    opacity: 0.45;
+  }
+  .tone-c {
+    stroke: var(--motif-c);
+    stroke-width: 5;
+    opacity: 0.75;
+  }
+  .ambient {
+    stroke: var(--motif-c);
+    stroke-width: 3;
+    opacity: 0.6;
+  }
+  .axis {
+    fill: none;
+    stroke: var(--motif-label);
+    stroke-width: 1.25;
+  }
+  .axes text {
+    fill: var(--motif-label);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+</style>
