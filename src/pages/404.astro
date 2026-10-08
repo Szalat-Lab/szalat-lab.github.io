@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { nav } from '../site.config';
+import { url } from '../lib/url';
+---
+
+<BaseLayout title="Page not found" description="This page does not exist on the Szalat Lab website.">
+  <div class="container page">
+    <p class="label">404</p>
+    <h1>Page not found</h1>
+    <p class="lead">The page you are looking for may have moved. Try one of these instead:</p>
+    <ul>
+      <li><a href={url()}>Home</a></li>
+      {nav.map((n) => <li><a href={url(n.href)}>{n.label}</a></li>)}
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-9) 0;
+  }
+  .label {
+    margin-bottom: var(--space-3);
+    color: var(--color-accent);
+  }
+  .lead {
+    max-width: var(--measure);
+    margin-top: var(--space-4);
+    color: var(--color-muted);
+  }
+  ul {
+    display: grid;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+    padding-left: 1.2em;
+  }
+</style>

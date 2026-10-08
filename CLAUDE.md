@@ -11,7 +11,7 @@
 - `npm run preview`: serve the built site at http://localhost:4321/
 
 ## Content locations
-- Site text (mission, overview, affiliations) and nav: `src/site.config.ts`
+- Site text (mission, overview, contact email, affiliations) and nav: `src/site.config.ts`. No street address.
 - People: `src/content/people/*.md`; Research areas: `src/content/research/*.md`
 - Publications: `src/data/publications.bib` (source of truth; never scrape Google Scholar).
   `note = {Abstract}` → Abstracts & posters section; `keywords = {featured}` → Home page list

@@ -8,6 +8,7 @@ order: 1
 photo: ../../assets/people/raphael-szalat.avif
 photoAlt: Portrait of Raphael E. Szalat in a white coat
 pubNames: ["Szalat"]
+email: Raphael.Szalat@bmc.org
 orcid: 0000-0002-6198-3405
 scholar: https://scholar.google.com/citations?user=NfS-5IQAAAAJ&hl=en
 linkedin: https://www.linkedin.com/in/raphael-szalat-241abb171/

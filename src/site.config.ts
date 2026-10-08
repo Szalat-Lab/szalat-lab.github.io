@@ -1,5 +1,5 @@
 // Site-wide text and settings. Edit values here; every page reads from this file.
-// The lab has chosen not to list a public email or street address.
+// The lab lists the PI's email for contact but no street address.
 
 export const site = {
   name: 'Szalat Lab',
@@ -11,6 +11,7 @@ export const site = {
     'The Szalat Lab combines single-cell and multiomic profiling of patient bone marrow with clinical research in multiple myeloma and related plasma cell disorders. Our work connects the features of malignant and non-malignant plasma cells and their microenvironment to treatment response and clinical outcomes.',
   description:
     'The Szalat Lab at Boston Medical Center and Boston University studies plasma cell disorders, including AL amyloidosis and multiple myeloma.',
+  email: 'Raphael.Szalat@bmc.org',
   affiliations: [
     'Boston Medical Center',
     'Boston University Chobanian & Avedisian School of Medicine',

@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // Deployment target. For a GitHub project page use
 //   SITE = 'https://<owner>.github.io' and BASE = '/<repo>'.
@@ -13,4 +14,5 @@ export default defineConfig({
   base: BASE,
   trailingSlash: 'ignore',
   output: 'static',
+  integrations: [sitemap()],
 });
